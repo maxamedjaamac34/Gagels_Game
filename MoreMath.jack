@@ -1,0 +1,55 @@
+class MoreMath {
+field int j;
+
+    constructor MoreMath new () {
+        let j = 0;
+
+        return this;
+    }
+
+    method int modulo (int number, int modulus) {
+    // Modulo returns the remainder of number/modulus
+        var int i; // number we are repeatedly subtracting modulus from
+        let i = number;
+        while (i > modulus) {
+            let i = i - modulus;
+        }
+        return i;
+    }
+
+    method int linearCongruentialGeneration (int lastNumber, int multiplier, int increment, int modulus) {
+
+    // Start with a seed and then create a sequence of pseudorandom numbers from it
+    // This only does one step of the piecewise function. The caller of the method should pass in the last
+    // number of the sequence (or the seed if this is the first time calling it)
+    // and the decided on parameters. It would be good to put those in static variables in the caller.
+
+    // https://en.wikipedia.org/wiki/Linear_congruential_generator
+
+        var int output;
+        let output = Math.multiply(lastNumber, multiplier);
+        let output = output + increment;
+        let output = modulo(output, modulus);
+        return output;
+    }
+
+    method int generateRandomNumber (int lastNumber) {
+    // Wraps linearCongruentialGeneration into a simpler to call method that just uses our predecided
+    // values for multiplier, increment, and modulus. When calling, you just need to put the previous number in your pseudorandom
+    // sequence, or the seed if this is your first pseudorandom number
+    // multiplier = 17
+    // increment = 7 
+    // modulus = 2^16
+    return linearCongruentialGeneration(lastNumber, 17, 7, 320);
+    }
+
+    method int obtainSeed () { // using keyboard input to generate a seed
+        var int i; // number that is continuously incremented while nothing is pressed
+        while (~(Keyboard.keyPressed() = 0)) {}
+        // We increase the counter when no key is pressed
+        while (Keyboard.keyPressed() = 0) {
+            let i = i + 1;
+        }
+        return i;
+    }
+}

@@ -1,0 +1,125 @@
+class Main {
+
+    function void main () {
+
+      var int i,j,k; // counters
+      var int randomNumber;
+      var char key; //stores the key pressed by the users
+      var Array a; //array holds computer's secret numbers
+      var Array b;
+      var boolean exit; 
+      var int iteration;
+      var boolean bagels; // bagel starts true at the start of a guess and becomes false whenever any pico or fermi is printed.
+                            // if bagel is true at the end of the guess, "Bagels " is printed
+      var MoreMath moreMath; // creates a MoreMath object so that the methods of the MoreMath class can be used in Main.
+      let iteration = 0;
+      let exit=false; // will convert exit to true. a flag that exits when iteration hits 20
+      let a = Array.new(3); //array of size 3 for capturing secret numbers
+      let b = Array.new(3); //array of size 3 holds digits 
+      let i=0;
+
+      do Output.printString("Welcome to Bagels! Before we start, would you like to read the instructions? (Y/N)");
+      let randomNumber = moreMath.obtainSeed(); // The seed comes from how long you wait to press a key
+      let key = Keyboard.keyPressed();
+      while (~(Keyboard.keyPressed() = 0)) {}
+      while (~((key = 121)|(key = 110))) { // while it's not y or n, keep listening
+        let key = Keyboard.keyPressed();
+        while (~(Keyboard.keyPressed() = 0)) {}
+      }
+
+      if (key=121){ // if y is pressed
+        do Output.printString("Instructions go here");
+        do Output.println();
+        do Output.printString("Press any key to start!");
+        while (Keyboard.keyPressed() = 0) {} // Wait until a key is pressed
+        do Screen.clearScreen();
+        do Output.moveCursor(0,0);
+      }
+      else { // if n is pressed
+        do Screen.clearScreen();
+        do Output.moveCursor(0,0);
+      }
+
+      // generate the secret number!!
+      let randomNumber = moreMath.generateRandomNumber(randomNumber);
+      let a[0] = moreMath.modulo(randomNumber, 10); // gets the ones digit of the random number we currently have
+
+      let randomNumber = moreMath.generateRandomNumber(randomNumber);
+      let a[1] = moreMath.modulo(randomNumber, 10); // gets the ones digit of the random number we currently have
+
+      while (a[0]= a[1]){ // regenerates the random number for a[1] if it is equal to a[0]
+        let randomNumber = moreMath.generateRandomNumber(randomNumber);
+        let a[1] = moreMath.modulo(randomNumber, 10); // gets the ones digit of the random number we currently have
+      }
+
+      let randomNumber = moreMath.generateRandomNumber(randomNumber);
+      let a[2] = moreMath.modulo(randomNumber, 10); // gets the ones digit of the random number we currently have
+
+      while ((a[0]= a[2])|(a[1] = a[2])){ // regenerates the random number for a[2] if it is equal to a[0] or a[1]
+        let randomNumber = moreMath.generateRandomNumber(randomNumber);
+        let a[2] = moreMath.modulo(randomNumber, 10); // gets the ones digit of the random number we currently have
+      }
+
+      do Output.printString("I am thinking of a three- digit number, try to guess my number!, you have 20 attempts only!");
+      do Output.println();
+      
+        while (~exit) {
+            let i = 0; // Reset index for new guess input
+            let bagels = true; // Reset whether a Bagels can be earned this guess or not
+            do Output.printString("Enter your guess (");
+            do Output.printInt(20 - iteration);
+            do Output.printString(" guesses left): ");
+
+        // Read each digit of the guess
+            while (i < 3) {
+                let key = Keyboard.keyPressed(); // Wait for key press
+                while (key = 0) { // Ensure we skip until a key is actually pressed
+                    let key = Keyboard.keyPressed();
+                }
+                let b[i] = key - 48;// Convert ASCII to actual number since 48 = 0, 49=1,50=2 etc
+                //wait for key release
+                do Output.printInt(b[i]);
+                while (~(key = 0)) {
+                    let key = Keyboard.keyPressed();
+                } 
+                let i = i + 1;
+        }
+
+            // Check if the guess is correct
+            if (a[0] = b[0] & a[1] = b[1] & a[2] = b[2]) {
+                do Output.printString(" Congratulations! You guessed the number correctly!");
+                return; // Exit the game after correct guess
+            }
+
+            // checking for fermis and picos
+            let k = 0;
+            while (k < 3) {
+                if (a[k] = b[k]) {
+                    do Output.printString(" Fermi");  // Correct value and position
+                    let bagels = false; // There cannot be a bagels if there is a fermi
+                } else {
+                    let j = 0;
+                    while (j < 3) {
+                        if (~(k = j) & (a[k] = b[j])) {
+                            do Output.printString(" Pico");  // Correct value in wrong position
+                            let bagels = false; // There cannot be a bagels if there is a pico
+                        }
+                        let j = j + 1;
+                    }
+                }
+                let k = k + 1;
+            }
+            if (bagels) {
+                do Output.printString(" Bagels");
+            }
+            do Output.println(); 
+
+            let iteration = iteration + 1;
+            if (iteration = 20) {
+                do Output.printString("You have reached the maximum number of attempts.");
+                let exit = true; // Set exit flag to true after 20 iterations
+            }
+        }
+        return;
+    }
+}
